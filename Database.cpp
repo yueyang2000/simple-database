@@ -40,13 +40,17 @@ void Database::operate(SQL &sql)
     {
         tables.erase(sql[2]);
     }
+    else if(sql[0]=="SHOW"&&sql[1]=="COLUMNS")
+    {
+        tables[sql[3]].show_columns();
+    }
 }
 void Database::show_tables()
 {
     cout<<"has tables: ";
+    cout<<endl;
     for(auto it=tables.begin();it!=tables.end();it++)
     {
-        cout<<it->first<<' ';
+        cout<<it->first<<endl;
     }
-    cout<<endl;
 }

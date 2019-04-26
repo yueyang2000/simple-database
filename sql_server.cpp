@@ -25,7 +25,7 @@ void sql_server::start()
         else
         {
             SQL sql(temp);
-            //operate(sql);
+            operate(sql);
         }
     }
 }
@@ -43,6 +43,7 @@ void sql_server::operate(SQL& sql)
             Database temp;
             db[sql[2]]=temp;
             current=db.find(sql[2]);
+            cout<<"create database "<<sql[2]<<endl;
         }
         else if(sql[0]=="DROP")
         {
@@ -57,6 +58,10 @@ void sql_server::operate(SQL& sql)
             cout<<"Database:"<<it->first<<endl;
             it->second.show_tables();
         }
+    }
+    else if(sql[0]=="SHOW"&&sql[1]=="TABLES")
+    {
+        current->second.show_tables();
     }
     else
     {

@@ -22,6 +22,7 @@ private:
     int rnum;//行数
     int primary;//主键位置
     vector <string> record;//所有数据
+    vector <string> col_name;
     map<string,col_info> columns;//列信息
     vector<bool> pick;//WhereClause语句筛选
 public:
@@ -30,10 +31,11 @@ public:
     void insert_into(SQL &sql);
     void show_table(SQL &sql);
     void show_columns();
-    void delete_from(SQL &sql){}
-    void update(SQL &sql){}
-    void select(SQL &sql){}
-    void where_clause(SQL &sql,int n){}
+    void delete_from(SQL &sql);
+    void update(SQL &sql);
+    void select(SQL &sql);
+    void where_clause(SQL &sql);
+        bool judge(string &str, int r);
 };
 
 
