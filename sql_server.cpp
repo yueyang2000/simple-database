@@ -32,7 +32,11 @@ void sql_server::start()
 
 void sql_server::operate(SQL& sql)
 {
-    if(sql[1]=="DATABASE")//判断是否为database操作
+    if(sql[0]=="USE")
+    {
+        current=db.find(sql[1]);
+    }
+    else if(sql[1]=="DATABASE")//判断是否为database操作
     {
         if(sql[0]=="CREATE")
         {
@@ -44,14 +48,14 @@ void sql_server::operate(SQL& sql)
         {
             db.erase(sql[2]);
         }
-        else if(sql[0]=="USE")
+
+    }
+    else if(sql[0]=="SHOW"&&sql[1]=="DATABASES")
+    {
+        for(auto it=db.begin();it!=db.end();it++)
         {
-            current=db.find(sql[2]);
-        }
-        else if(sql[0]=="SHOW")
-        {
-            auto it=db.find(sql[2]);
-            it->second.show();
+            cout<<"Database:"<<it->first<<endl;
+            it->second.show_tables();
         }
     }
     else

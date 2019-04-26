@@ -15,6 +15,6 @@ private:
     map<string,Table> tables;
 public:
     void operate(SQL &sql);
-    void show();
+    void show_tables();
 };
 #endif /* Database_h */

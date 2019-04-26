@@ -12,27 +12,22 @@
 Table::Table(SQL& sql)
 {
     int i=3;
+    int counter=0;//列数统计
     while(true)
     {
         if(sql[i]=="PRIMARY")
         {
-            for(auto it=col.begin();it!=col.end();it++)
-            {
-                if(it->name==sql[i+2])
-                {
-                    primary=(int)(it-col.begin());
-                    cout<<"primary key:"<<primary<<"th colume\n";
-                    break;
-                }
-            }
-            break;
+            auto pri=columns.find(sql[i+2]);
+            primary=pri->second.order;
         }
         else if(sql[i]=="")
         {
             break;
         }
-        colume newc;
-        newc.name=sql[i++];
+        col_info newc;
+        newc.order=counter;
+        counter++;
+        string cname=sql[i++];
         newc.type=sql[i++];
         if(sql[i]=="NOT"&&sql[i+1]=="NULL")
         {
@@ -41,9 +36,9 @@ Table::Table(SQL& sql)
         }
         else
             newc.not_null=false;
-        col.push_back(newc);
+        columns[cname]=newc;
     }
-    cnum=(int)col.size();
+    cnum=(int)columns.size();
     rnum=0;
 }
 
@@ -62,10 +57,12 @@ void Table::insert_into(SQL &sql)
     for(int i=3;i<value_pos;i++)
     {
         int c_pos=-1;
-        for(c_pos=0;c_pos<cnum;c_pos++)
+        for(auto it=columns.begin();it!=columns.end();it++)
         {
-            if(col[c_pos].name==sql[i])
-                break;
+            if(it->first==sql[i])
+            {
+                c_pos=it->second.order;
+            }
         }
         temp[c_pos]=sql[i+value_pos-2];
     }

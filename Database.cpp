@@ -36,8 +36,17 @@ void Database::operate(SQL &sql)
         auto it=tables.find(sql[sql.get_size()-1]);
         it->second.select(sql);
     }
+    else if(sql[0]=="DROP"&&sql[1]=="TABLE")
+    {
+        tables.erase(sql[2]);
+    }
 }
-void Database::show()
+void Database::show_tables()
 {
-    cout<<"show database!\n";
+    cout<<"has tables: ";
+    for(auto it=tables.begin();it!=tables.end();it++)
+    {
+        cout<<it->first<<' ';
+    }
+    cout<<endl;
 }

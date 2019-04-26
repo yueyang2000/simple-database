@@ -13,8 +13,8 @@ void SQL::parser()
 {
     static set<string> keywords
     {
-        "CREATE","DATABASE","USE","WHERE","SHOW","TABLE",
-        "INT","DOUBLE","CHAR","NOT","NULL","INSERT","INTO",
+        "CREATE","DATABASE","DATABASES","USE","WHERE","SHOW","TABLE",
+        "TABLES","INT","DOUBLE","CHAR","NOT","NULL","INSERT","INTO",
         "VALUES","DELETE","FROM","UPDATE","SET","SELECT"
     };
     for(auto it=str.begin();it!=str.end();it++)
