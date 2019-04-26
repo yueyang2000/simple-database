@@ -33,7 +33,8 @@ public:
     void delete_from(SQL &sql){}
     void update(SQL &sql){}
     void select(SQL &sql){}
-    void where_clause(SQL &sql,int n){}
+    void where_clause(SQL &sql,int n){}//where的位置
+	bool judge(string &str, int r);
 };
 
 
