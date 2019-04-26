@@ -1,3 +1,2 @@
-# hello-world
-just for fun
-object oriented programming
+# bigwork for oop course
+a simple sql server
