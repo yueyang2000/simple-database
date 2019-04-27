@@ -33,7 +33,15 @@ void Database::operate(SQL &sql)
     }
     else if(sql[0]=="SELECT")
     {
-        auto it=tables.find(sql[sql.get_size()-1]);
+        int i;
+        for(i=0;i!=sql.get_size();i++)
+        {
+            if(sql[i]=="FROM")
+            {
+                break;
+            }
+        }
+        auto it=tables.find(sql[i+1]);
         it->second.select(sql);
     }
     else if(sql[0]=="DROP"&&sql[1]=="TABLE")

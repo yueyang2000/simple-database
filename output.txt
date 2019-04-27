@@ -5,5 +5,16 @@ stu_id	stu_name
 2018011344	"b"	
 2018011445	"c"	
 stu_id>2018011300 stu_id<2018011400 AND 
-stu_id>2018011300
-stu_id 2018011300
+no 1yes no 
+stu_name	
+"b"	
+stu_name>"a" stu_name<"c" AND 
+no 1yes no 
+stu_id	stu_name	
+2018011344	"b"	
+stu_name="b" 
+no 1yes no 
+stu_name>"a" stu_name<"c" AND 
+no no 
+stu_id	stu_name	
+BYE!

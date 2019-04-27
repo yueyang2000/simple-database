@@ -9,7 +9,8 @@
 #include "Header.h"
 #include "sql_server.h"
 using namespace std;
-#define LOCAL
+//#define LOCAL
+
 int main(int argc, const char * argv[]) {
 #ifdef LOCAL
     freopen("/Users/yueyang/yiqunyang/大一下/面向对象的程序设计基础/database/database/input.txt","r",stdin);

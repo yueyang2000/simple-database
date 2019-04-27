@@ -35,7 +35,7 @@ public:
     void update(SQL &sql);
     void select(SQL &sql);
     void where_clause(SQL &sql);
-        bool judge(string &str, int r);
+    bool judge(string &str, int r);
 };
 
 
