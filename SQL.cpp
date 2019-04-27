@@ -15,7 +15,8 @@ void SQL::parser()
     {
         "CREATE","DATABASE","DATABASES","USE","WHERE","SHOW","TABLE",
         "TABLES","INT","DOUBLE","CHAR","NOT","NULL","INSERT","INTO",
-        "VALUES","DELETE","FROM","UPDATE","SET","SELECT","COLUMNS"
+        "VALUES","DELETE","FROM","UPDATE","SET","SELECT","COLUMNS",
+        "DROP","AND","OR"
     };
     for(auto it=str.begin();it!=str.end();it++)
     {
@@ -48,9 +49,9 @@ void SQL::parser()
         else
             words.push_back(temp);
     }
-    for(int lp=0;lp<words.size();lp++)
+    /*for(int lp=0;lp<words.size();lp++)
         cout<<words[lp]<<' ';
-    cout<<endl;
+    cout<<endl;*/
 }
 
 string SQL::operator[](int n)const

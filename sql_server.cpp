@@ -14,9 +14,10 @@ void sql_server::start()
 {
     while(true)
     {
-        cout<<"mysql>";
+        //cout<<"mysql>";
         string temp;
         getline(cin,temp);
+        //cout<<temp<<endl;
         if(temp=="quit")
         {
             cout<<"BYE!\n";
@@ -47,6 +48,7 @@ void sql_server::operate(SQL& sql)
         }
         else if(sql[0]=="DROP")
         {
+            cout<<"drop database "<<sql[2]<<endl;
             db.erase(sql[2]);
         }
 

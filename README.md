@@ -5,13 +5,14 @@
 - Database: 数据库对象，负责执行表级别的语句，调用对应的表操作接口
 - Table: 表对象，具体实现各类表操作的接口
 
-## 已基本实现所有功能（还需调试）
-
-## 初步debug完成的功能
+## 已经实现功能（还需调试）
 - CREATE DATABASE
 - DROP DATABASE
 - USE
 - SHOW DATABASES
 - CREATE TABLE
-- SHOW COLUMNS
-## 革命尚未成功，同志仍需努力
+- DROP TABLE
+- INSERT INTO
+
+## 未实现的功能见作业文档以及Table类未实现的方法
+

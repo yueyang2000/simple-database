@@ -55,30 +55,25 @@ void Table::insert_into(SQL &sql)
     int value_pos=0;
     for(int i=3;i<sql.get_size();i++)
     {
-        if(sql[i]=="VALUE")
+        if(sql[i]=="VALUES")
         {
             value_pos=i;
             break;
         }
     }
-    string temp[cnum];
+    string* temp=new string[cnum];
     for(int i=3;i<value_pos;i++)
     {
-        int c_pos=-1;
-        for(auto it=columns.begin();it!=columns.end();it++)
-        {
-            if(it->first==sql[i])
-            {
-                c_pos=it->second.order;
-            }
-        }
+        int c_pos=columns[sql[i]].order;
         temp[c_pos]=sql[i+value_pos-2];
     }
     for(int i=0;i<cnum;i++)
     {
+        //cout<<"insert "<<temp[i]<<endl;
         record.push_back(temp[i]);
     }
     rnum++;
+    delete []temp;
 }
 
 bool Table::judge(string &str,int r) {//r是第几行 //计算每个表达式的正确性
@@ -93,7 +88,15 @@ bool Table::judge(string &str,int r) {//r是第几行 //计算每个表达式的
     stringstream ss(str);
     string name, value;
     ss >> name >> value;//要比较的列名和数值
+    cout<<name<<' '<<value<<endl;
+    if(columns.count(name))
+    {
+        cout<<"find!\n";
+    }
+    else
+        cout<<"no!!!!\n";
     int c = columns[name].order;
+    cout<<c<<endl;
     if (columns[name].type =="INT" || columns[name].type == "DOUBLE") {//如果类型是int或double
         if (op =="<") {
             if (atof(record[r*cnum + c].c_str()) < atof(value.c_str())) return true;
@@ -104,6 +107,7 @@ bool Table::judge(string &str,int r) {//r是第几行 //计算每个表达式的
             else return false;
         }
         else {
+            cout<<"int>"<<endl;
             if (atof(record[r*cnum + c].c_str()) > atof(value.c_str())) return true;
             else return false;
         }
@@ -142,10 +146,10 @@ void Table::where_clause(SQL &sql) {//where的位置
         return;
     }
     string suff;//转后缀式
-    map<string, int>p = { {"and",1},{"or",0} };
+    map<string, int>p = { {"AND",1},{"OR",0} };
     stack<string> s;
     for (int i = n + 1; i < sql.get_size(); i++) {
-        if (sql[i] == "and" || sql[i] == "or") {
+        if (sql[i] == "AND" || sql[i] == "OR") {
             if (s.empty()) {
                 s.push(sql[i]);
             }
@@ -175,10 +179,12 @@ void Table::where_clause(SQL &sql) {//where的位置
         string temp;
         stack<bool> cal;
         while (ss >> temp) {
-            if (temp == "and" || temp == "or") {
+            cout<<temp<<endl;
+            if (temp == "AND" || temp == "OR") {
+                cout<<"operator!\n";
                 bool t2 = cal.top(); cal.pop();
                 bool t1 = cal.top(); cal.pop();
-                if (temp == "and") {
+                if (temp == "AND") {
                     if (t1&&t2) {
                         cal.push(true);
                     }
@@ -193,13 +199,15 @@ void Table::where_clause(SQL &sql) {//where的位置
             }
             else {
                 cal.push(judge(temp, i));//第i行
+                cout<<"judge "<<(int)cal.top()<<endl;
             }
         }
         bool res = cal.top(); cal.pop();
         pick.push_back(res);
+        cout<<"push_back "<<(int)res<<endl;
     }
     for (int i = 0; i < rnum; i++) {
-        if (pick[i]) cout << "yes" << " ";
+        if (pick[i]) cout << i<<"yes" << " ";
         else cout << "no" << " ";
     }
     cout << endl;
@@ -210,6 +218,11 @@ void Table::delete_from(SQL &sql)
 {
     where_clause(sql);
     int pos=0;
+    for(int i=0;i<(int)record.size();i++)
+    {
+        cout<<record[i]<<' ';
+    }
+    cout<<endl;
     for(int i=0;i<rnum;i++)
     {
         if(pick[i])
@@ -217,11 +230,17 @@ void Table::delete_from(SQL &sql)
             for(int j=0;j<cnum;j++)
             {
                 record.erase(record.begin()+pos);
+                for(int i=0;i<(int)record.size();i++)
+                {
+                    cout<<record[i]<<' ';
+                }
+                cout<<endl;
             }
         }
         else
             pos+=cnum;
     }
+    rnum--;
 }
 void Table::update(SQL &sql)
 {
@@ -243,6 +262,7 @@ void Table::update(SQL &sql)
             value+=sql[pos][i];
             i++;
         }
+        cout<<cname<<' '<<value<<endl;
         int c=columns[cname].order;
         for(int r=0;r<rnum;r++)
         {
@@ -251,6 +271,7 @@ void Table::update(SQL &sql)
                 record[r*cnum+c]=value;
             }
         }
+        pos++;
     }
 }
 void Table::select(SQL &sql)
