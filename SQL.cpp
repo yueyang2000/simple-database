@@ -24,6 +24,10 @@ void SQL::parser()
         {
             *it=' ';
         }
+        else if(*it=='\'')
+        {
+            *it='\"';
+        }
     }
     stringstream ss(str);
     string temp;
@@ -56,9 +60,9 @@ void SQL::parser()
 
 string SQL::operator[](int n)const
 {
-    if(n>(int)words.size())
+    if(n>=(int)words.size())
     {
-        cout<<"operator[] RE!\n";
+        //cout<<"operator[] RE!\n";
         return "";
     }
     else

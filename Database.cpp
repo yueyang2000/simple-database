@@ -55,8 +55,7 @@ void Database::operate(SQL &sql)
 }
 void Database::show_tables()
 {
-    cout<<"has tables: ";
-    cout<<endl;
+    cout<<"Table\n";
     for(auto it=tables.begin();it!=tables.end();it++)
     {
         cout<<it->first<<endl;

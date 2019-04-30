@@ -16,15 +16,16 @@ Table::Table(SQL& sql)
     int counter=0;//列数统计
     while(true)
     {
-        if(sql[i]=="PRIMARY")
+        if(sql[i]=="")
+        {
+            break;
+        }
+        else if(sql[i]=="PRIMARY")
         {
             auto pri=columns.find(sql[i+2]);
             primary=pri->second.order;
-            break;
-        }
-        else if(sql[i]=="")
-        {
-            break;
+            i=i+3;
+            continue;
         }
         col_info newc;
         newc.order=counter;
@@ -43,11 +44,6 @@ Table::Table(SQL& sql)
     }
     cnum=(int)columns.size();
     rnum=0;
-    for(int lp=0;lp<cnum;lp++)
-    {
-        cout<<col_name[lp]<<' ';
-    }
-    cout<<endl;
 }
 
 void Table::insert_into(SQL &sql)
@@ -69,7 +65,6 @@ void Table::insert_into(SQL &sql)
     }
     for(int i=0;i<cnum;i++)
     {
-        //cout<<"insert "<<temp[i]<<endl;
         record.push_back(temp[i]);
     }
     rnum++;
@@ -89,11 +84,6 @@ bool Table::judge(string &str,int r) {//r是第几行 //计算每个表达式的
     stringstream ss(str);
     string name, value;
     ss >> name >> value;//要比较的列名和数值
-    /*cout<<name<<' '<<value<<endl;
-    for(auto it=columns.begin();it!=columns.end();it++)
-    {
-        cout<<it->first<<it->second.order<<' '<<it->second.type<<endl;
-    }*/
     int c = columns[name].order;
     if (columns[name].type =="INT" || columns[name].type == "DOUBLE") {//如果类型是int或double
         if (op =="<") {
@@ -169,7 +159,7 @@ void Table::where_clause(SQL &sql) {//where的位置
         suff += " ";
         s.pop();
     }
-    cout << suff << endl;//后缀式
+    //cout << suff << endl;//后缀式
     pick.clear();//清空原pick
     for (int i = 0; i < rnum; i++) {//每行循环
         stringstream ss(suff);
@@ -202,11 +192,11 @@ void Table::where_clause(SQL &sql) {//where的位置
         pick.push_back(res);
         //cout<<"push_back "<<(int)res<<endl;
     }
-    for (int i = 0; i < rnum; i++) {
-        if (pick[i]) cout << i<<"yes" << " ";
+    /*for (int i = 0; i < rnum; i++) {
+        if (pick[i]) cout <<"yes" << " ";
         else cout << "no" << " ";
     }
-    cout << endl;
+    cout << endl;*/
 }
 
 
@@ -253,7 +243,6 @@ void Table::update(SQL &sql)
             value+=sql[pos][i];
             i++;
         }
-        cout<<cname<<' '<<value<<endl;
         int c=columns[cname].order;
         for(int r=0;r<rnum;r++)
         {
@@ -268,6 +257,15 @@ void Table::update(SQL &sql)
 void Table::select(SQL &sql)
 {
     where_clause(sql);
+    bool has_result=false;//判断是否有查询结果
+    for(int i=0;i<rnum;i++)
+    {
+        if(pick[i])
+            has_result=true;
+    }
+    if(!has_result)
+        return;
+    
     int pos=1;
     vector<bool> output;
     for(int lp=0;lp<cnum;lp++)
@@ -290,21 +288,32 @@ void Table::select(SQL &sql)
         }
         pos++;
     }
-    for(int i=0;i<cnum;i++)
+    for(auto it=columns.begin();it!=columns.end();it++)
     {
-        if(output[i])
-            cout<<col_name[i]<<'\t';
+        if(output[it->second.order])
+            cout<<it->first<<'\t';
     }
     cout<<endl;
     for(int r=0;r<rnum;r++)
     {
         if(pick[r])
         {
-            for(int c=0;c<cnum;c++)
+            for(auto it=columns.begin();it!=columns.end();it++)
             {
+                int c=it->second.order;
                 if(output[c])
                 {
-                    cout<<record[r*cnum+c]<<'\t';
+                    if(it->second.type=="CHAR")
+                    {
+                    string temp;
+                    for(int i=1;i<record[r*cnum+c].size()-1;i++)
+                    {
+                        temp+=record[r*cnum+c][i];
+                    }
+                    cout<<temp<<'\t';
+                    }
+                    else
+                        cout<<record[r*cnum+c]<<'\t';
                 }
             }
             cout<<endl;
@@ -314,17 +323,27 @@ void Table::select(SQL &sql)
 
 void Table::show_columns()
 {
-    cout<<"Field    Type    Null    Key    Default    Extra\n";
-    for(int c=0;c<cnum;c++)
+    cout<<"Field\tType\tNull\tKey\tDefault\tExtra\n";
+    for(auto it=columns.begin();it!=columns.end();it++)
     {
-        cout<<col_name[c]<<'\t'<<columns[col_name[c]].type<<'\t';
-        if(columns[col_name[c]].not_null)
+        cout<<it->first<<'\t';
+        if(it->second.type=="INT")
+        {
+            cout<<"int(11)\t";
+        }
+        else if(it->second.type=="CHAR")
+        {
+            cout<<"char(1)\t";
+        }
+        else
+            cout<<"double\t";
+        if(it->second.not_null)
         {
             cout<<"NO"<<'\t';
         }
         else
             cout<<"YES"<<'\t';
-        if(c==primary)
+        if(it->second.order==primary)
         {
             cout<<"PRI"<<'\t';
         }

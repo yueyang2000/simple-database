@@ -18,9 +18,9 @@ void sql_server::start()
         string temp;
         getline(cin,temp);
         //cout<<temp<<endl;
-        if(temp=="quit")
+        if(temp=="quit"||temp=="")
         {
-            cout<<"BYE!\n";
+            //cout<<"BYE!\n";
             return;
         }
         else
@@ -44,21 +44,20 @@ void sql_server::operate(SQL& sql)
             Database temp;
             db[sql[2]]=temp;
             current=db.find(sql[2]);
-            cout<<"create database "<<sql[2]<<endl;
+            //cout<<"create database "<<sql[2]<<endl;
         }
         else if(sql[0]=="DROP")
         {
-            cout<<"drop database "<<sql[2]<<endl;
+            //cout<<"drop database "<<sql[2]<<endl;
             db.erase(sql[2]);
         }
-
     }
     else if(sql[0]=="SHOW"&&sql[1]=="DATABASES")
     {
+        cout<<"Database\n";
         for(auto it=db.begin();it!=db.end();it++)
         {
-            cout<<"Database:"<<it->first<<endl;
-            it->second.show_tables();
+            cout<<it->first<<endl;
         }
     }
     else if(sql[0]=="SHOW"&&sql[1]=="TABLES")
