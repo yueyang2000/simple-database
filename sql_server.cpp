@@ -1,10 +1,4 @@
-//
-//  sql_server.cpp
-//  database
-//
-//  Created by 乐阳 on 2019/4/24.
-//  Copyright © 2019 乐阳. All rights reserved.
-//
+
 #include "Header.h"
 #include "sql_server.h"
 #include "SQL.h"
@@ -62,6 +56,7 @@ void sql_server::operate(SQL& sql)
     }
     else if(sql[0]=="SHOW"&&sql[1]=="TABLES")
     {
+        cout<<"Tables_in_"<<current->first<<endl;
         current->second.show_tables();
     }
     else

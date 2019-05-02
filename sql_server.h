@@ -1,10 +1,4 @@
-//
-//  sql_server.h
-//  database
-//
-//  Created by 乐阳 on 2019/4/24.
-//  Copyright © 2019 乐阳. All rights reserved.
-//
+
 
 #ifndef sql_server_h
 #define sql_server_h

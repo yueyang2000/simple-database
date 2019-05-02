@@ -1,10 +1,4 @@
-//
-//  Database.cpp
-//  database
-//
-//  Created by 乐阳 on 2019/4/24.
-//  Copyright © 2019 乐阳. All rights reserved.
-//
+
 
 #include "Header.h"
 #include "Database.h"
@@ -55,7 +49,7 @@ void Database::operate(SQL &sql)
 }
 void Database::show_tables()
 {
-    cout<<"Table\n";
+    
     for(auto it=tables.begin();it!=tables.end();it++)
     {
         cout<<it->first<<endl;

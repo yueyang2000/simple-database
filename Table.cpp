@@ -1,15 +1,10 @@
-//
-//  Table.cpp
-//  database
-//
-//  Created by 乐阳 on 2019/4/25.
-//  Copyright © 2019 乐阳. All rights reserved.
-//
 
 #include "Header.h"
 #include "Table.h"
 #include <stack>
 #include <sstream>
+#include <set>
+#include <iomanip>
 Table::Table(SQL& sql)
 {
     int i=3;
@@ -24,6 +19,7 @@ Table::Table(SQL& sql)
         {
             auto pri=columns.find(sql[i+2]);
             primary=pri->second.order;
+            pri_type=pri->second.type;
             i=i+3;
             continue;
         }
@@ -58,6 +54,9 @@ void Table::insert_into(SQL &sql)
         }
     }
     string* temp=new string[cnum];
+    for(int i=0;i<cnum;i++){
+        temp[i]="NULL";
+    }
     for(int i=3;i<value_pos;i++)
     {
         int c_pos=columns[sql[i]].order;
@@ -294,29 +293,99 @@ void Table::select(SQL &sql)
             cout<<col_name[c]<<'\t';
     }
     cout<<endl;
+    
+    if(pri_type=="CHAR"){//主键类型是char
+    set<string> pri;//存主键
     for(int r=0;r<rnum;r++)
     {
         if(pick[r])
         {
-            for(int c=0;c<cnum;c++)
-            {
-                if(output[c])
-                {
-                    if(columns[col_name[c]].type=="CHAR")
-                    {
-                    string temp;
-                    for(int i=1;i<record[r*cnum+c].size()-1;i++)
-                    {
-                        temp+=record[r*cnum+c][i];
-                    }
-                    cout<<temp<<'\t';
-                    }
-                    else
-                        cout<<record[r*cnum+c]<<'\t';
+            pri.insert(record[r*cnum+primary]);
+        }//把要输出的主键放入
+    }
+    for(auto it=pri.begin();it!=pri.end();it++){
+        for(int r=0;r<rnum;r++){
+            if(*it==record[r*cnum+primary]){//说明输出第r行
+                for(int c=0;c<cnum;c++){
+                    if(output[c]){
+                        if(columns[col_name[c]].type=="CHAR"){
+                            if(record[r*cnum+c]=="NULL"){
+                                cout<<"NULL\t";
+                            }
+                            else{string temp;
+                            for(int i=1;i<record[r*cnum+c].size()-1;i++)
+                            {
+                                temp+=record[r*cnum+c][i];
+                            }
+                            cout<<temp<<'\t';
+                            }
+                        }
+                        else if(columns[col_name[c]].type=="DOUBLE"){
+                            if(record[r*cnum+c]=="NULL"){
+                                cout<<"NULL\t";
+                            }
+                            else{cout<<fixed<<setprecision(4);
+                            double x=atof(record[r*cnum+c].c_str());
+                            cout<<x<<'\t';
+                            //std::cout << std::defaultfloat;
+                            }
+                        }
+                         else cout<<record[r*cnum+c]<<'\t'; 
+                        }
+                       
                 }
-            }
             cout<<endl;
+            break;
+            }
         }
+    }
+    }
+    else{//主键类型是int或double
+    set<double> pri;
+    for(int r=0;r<rnum;r++)
+    {
+        if(pick[r])
+        {
+            pri.insert(atof(record[r*cnum+primary].c_str()));
+        }//把要输出的主键放入
+    }
+    for(auto it=pri.begin();it!=pri.end();it++){
+        for(int r=0;r<rnum;r++){
+            if(*it==atof(record[r*cnum+primary].c_str())){//说明输出第r行
+                for(int c=0;c<cnum;c++){
+                    if(output[c]){
+                        if(columns[col_name[c]].type=="CHAR"){
+                            if(record[r*cnum+c]=="NULL"){
+                                cout<<"NULL\t";
+                            }
+                            else{string temp;
+                            for(int i=1;i<record[r*cnum+c].size()-1;i++)
+                            {
+                                temp+=record[r*cnum+c][i];
+                            }
+                            cout<<temp<<'\t';
+                            }
+                        }
+                        else if(columns[col_name[c]].type=="DOUBLE"){
+                            if(record[r*cnum+c]=="NULL"){
+                                cout<<"NULL\t";
+                            }
+                            else{cout<<fixed<<setprecision(4);
+                            double x=atof(record[r*cnum+c].c_str());
+                            cout<<x<<'\t';
+                            //std::cout << std::defaultfloat;
+                            }
+                        }
+                         else cout<<record[r*cnum+c]<<'\t'; 
+                        }
+                       
+                }
+            cout<<endl;
+            break;
+            }
+        }
+    }
+
     }
 }
 

@@ -1,10 +1,4 @@
-//
-//  Database.h
-//  database
-//
-//  Created by 乐阳 on 2019/4/23.
-//  Copyright © 2019 乐阳. All rights reserved.
-//
+
 
 #ifndef Database_h
 #define Database_h

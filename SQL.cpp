@@ -1,10 +1,4 @@
-//
-//  SQL.cpp
-//  database
-//
-//  Created by 乐阳 on 2019/4/24.
-//  Copyright © 2019 乐阳. All rights reserved.
-//
+
 #include "SQL.h"
 #include <sstream>
 #include <cctype>
