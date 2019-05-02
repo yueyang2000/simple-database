@@ -288,22 +288,21 @@ void Table::select(SQL &sql)
         }
         pos++;
     }
-    for(auto it=columns.begin();it!=columns.end();it++)
+    for(int c=0;c<cnum;c++)
     {
-        if(output[it->second.order])
-            cout<<it->first<<'\t';
+        if(output[c])
+            cout<<col_name[c]<<'\t';
     }
     cout<<endl;
     for(int r=0;r<rnum;r++)
     {
         if(pick[r])
         {
-            for(auto it=columns.begin();it!=columns.end();it++)
+            for(int c=0;c<cnum;c++)
             {
-                int c=it->second.order;
                 if(output[c])
                 {
-                    if(it->second.type=="CHAR")
+                    if(columns[col_name[c]].type=="CHAR")
                     {
                     string temp;
                     for(int i=1;i<record[r*cnum+c].size()-1;i++)
@@ -324,8 +323,9 @@ void Table::select(SQL &sql)
 void Table::show_columns()
 {
     cout<<"Field\tType\tNull\tKey\tDefault\tExtra\n";
-    for(auto it=columns.begin();it!=columns.end();it++)
+    for(int i=0;i<cnum;i++)
     {
+        auto it=columns.find(col_name[i]);
         cout<<it->first<<'\t';
         if(it->second.type=="INT")
         {
