@@ -7,14 +7,11 @@ using namespace std;
 int main(int argc, const char * argv[]) {
 #ifdef LOCAL
     freopen("input.txt","r",stdin);
-    /*freopen("/Users/yueyang/yiqunyang/大一下/面向对象的程序设计基础/database/database/output.txt","w",stdout);*/
-    
 #endif
-    sql_server mysql;
-    mysql.start();
+    sql_server mysql;                           //mysql中储存若干database
+    mysql.start();                              //start
 #ifdef LOCAL
     fclose(stdin);
-    //fclose(stdout);
 #endif
     return 0;
 }
